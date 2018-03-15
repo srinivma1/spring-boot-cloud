@@ -1,0 +1,42 @@
+version: '3'
+services:
+    discovery-service:
+        container_name: discovery-service
+        build:
+            context: ./discovery-service
+            dockerfile: Dockerfile
+        image: discovery-service:latest
+        ports:
+            - "8761:8080"
+    account-service:
+        container_name: account-service
+        build:
+            context: ./account-service
+            dockerfile: Dockerfile
+        image: account-service:latest
+        depends_on:
+         - discovery-service
+        expose:
+         - "8080"
+          
+           
+    customer-service:
+        container_name: customer-service
+        build:
+            context: ./customer-service
+            dockerfile: Dockerfile
+        image: customer-service:latest
+        depends_on:
+         - discovery-service
+   
+    gateway-service:
+        container_name: gateway-service
+        build:
+            context: ./gateway-service
+            dockerfile: Dockerfile
+        image: gateway-service:latest
+        ports:
+            - "8085:8080" 
+        depends_on:
+         - discovery-service            
+       
